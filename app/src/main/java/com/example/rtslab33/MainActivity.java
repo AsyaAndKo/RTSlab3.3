@@ -26,21 +26,21 @@ public class MainActivity extends AppCompatActivity {
         String inputC = ((EditText) findViewById(R.id.lab33C)).getText().toString();
         String inputD = ((EditText) findViewById(R.id.lab33D)).getText().toString();
         String inputY = ((EditText) findViewById(R.id.lab33Y)).getText().toString();
-        String inputMutationPercent = ((EditText) findViewById(R.id.lab33MutationPercent))
-                .getText().toString();
+        String inputMultiplier = ((EditText) findViewById(R.id.editTextMultiplier)).getText().toString();
 
         if (inputA.isEmpty() || inputB.isEmpty() || inputC.isEmpty()
-                || inputD.isEmpty() || inputY.isEmpty() || inputMutationPercent.isEmpty()) {
+                || inputD.isEmpty() || inputY.isEmpty() || inputMultiplier.isEmpty()) {
             Toast.makeText(this, "Not all numbers specified!",
                     Toast.LENGTH_SHORT).show();
             return;
         }
 
-        double mutationPercent = Double.parseDouble(inputMutationPercent);
-        if (mutationPercent < 0 || mutationPercent > 1) {
-            Toast.makeText(this, "Mutation percent should be from 0 to 1!",
+        double multiplier = Double.parseDouble(inputMultiplier);
+        if (multiplier < 0 || multiplier > 1) {
+            Toast.makeText(this, "Multiplier should be from 0 to 1!",
                     Toast.LENGTH_SHORT).show();
         }
+
 
         int a = Integer.parseInt(inputA);
         int b = Integer.parseInt(inputB);
@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         int y = Integer.parseInt(inputY);
 
         long time = System.nanoTime();
-        int[] xs = findSolution(a, b, c, d, y, mutationPercent);
+        int[] xs = findSolution(a, b, c, d, y, multiplier);
         time = System.nanoTime() - time;
 
         TextView textViewRoots = findViewById(R.id.lab33Roots);
@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
         return population;
     }
 
-    private int[] findSolution(int a, int b, int c, int d, int y, double mutationPercent) {
+    private int[] findSolution(int a, int b, int c, int d, int y, double multiplier) {
         int[][] population = generateStartingPopulation(y);
         int[] abcd = {a, b, c, d};
         int index;
@@ -86,15 +86,15 @@ public class MainActivity extends AppCompatActivity {
                 ) {
                     population = newPopulation;
                 } else {
-                    randomMutation(population, y, mutationPercent);
+                    randomMutation(population, y, multiplier);
                 }
             }
         }
         return population[index];
     }
 
-    private void randomMutation(int[][] population, int y, double mutationPercent) {
-        if (RANDOM.nextDouble() < mutationPercent) {
+    private void randomMutation(int[][] population, int y, double multiplier) {
+        if (RANDOM.nextDouble() < multiplier) {
             for (int i = 0; i < population.length; i++) {
                 int randIndex = RANDOM.nextInt(population[0].length);
                 population[i][randIndex] = RANDOM.nextInt(y);
